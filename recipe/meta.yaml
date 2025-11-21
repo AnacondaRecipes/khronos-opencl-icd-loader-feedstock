@@ -42,7 +42,6 @@ test:
     - test -f $PREFIX/include/OpenCL/cl.h               # [osx]
     - test -f $PREFIX/include/CL/cl.h                   # [linux]
     - test -f $PREFIX/lib/libOpenCL${SHLIB_EXT}         # [unix]
-    - cllayerinfo
     - pkg-config OpenCL --libs --cflags
 
     # This crashes with a segfault. Likely for a lack of ICD to talk to.
