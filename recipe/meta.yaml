@@ -1,4 +1,4 @@
-{% set version = "2024.05.08" %}
+{% set version = "2025.07.22" %}
 
 package:
   name: khronos-opencl-icd-loader
@@ -6,13 +6,9 @@ package:
 
 source:
   - url: https://github.com/KhronosGroup/OpenCL-ICD-Loader/archive/refs/tags/v{{ version }}.zip
-    sha256: 3326b81cd47829a8b738465944674e94332b55d988e12bbb760f54d71a0ac9a6
+    sha256: db29e0028ff1ee5f166ce726ad046375233bb530ea98c00e05f4b1e517343771
     patches:
       - no_check_integrity_win.patch
-
-  - url: https://github.com/KhronosGroup/OpenCL-Headers/archive/v{{ version }}.zip
-    sha256: 83296f08e670d8f52c94972587f22ad8cbbb1383aa00b11f376a9c01686bf399
-    folder: inc
 
 build:
   number: 0
@@ -28,19 +24,27 @@ requirements:
   build:
     - cmake
     - {{ compiler('c') }}
+    - {{ stdlib('c') }}
     - python
     - make   # [not win]
     - ninja  # [win]
   host:
+    - opencl-headers ={{ version }}
   run:
+    - {{ pin_compatible("opencl-headers", max_pin=None) }}
+
 
 test:
+  requires:
+    - pkg-config
   commands:
     - if not exist %LIBRARY_INC%\\CL\\cl.h exit 1       # [win]
     - if not exist %LIBRARY_BIN%\\OpenCL.dll exit 1     # [win]
     - test -f $PREFIX/include/OpenCL/cl.h               # [osx]
     - test -f $PREFIX/include/CL/cl.h                   # [linux]
     - test -f $PREFIX/lib/libOpenCL${SHLIB_EXT}         # [unix]
+    - cllayerinfo
+    - pkg-config OpenCL --libs --cflags
 
     # This crashes with a segfault. Likely for a lack of ICD to talk to.
     # - cd %SRC_DIR%/build && ctest
@@ -49,12 +53,12 @@ test:
   #   - pyopencl
 
 about:
-  home: https://www.khronos.org/registry/cl/
-  dev_url: https://github.com/KhronosGroup/OpenCL-ICD-Loader
+  home: https://registry.khronos.org/OpenCL/
   license: Apache-2.0
   license_file: LICENSE
   summary: A driver loader for OpenCL
-
+  dev_url: https://github.com/KhronosGroup/OpenCL-ICD-Loader
+  doc_url: https://registry.khronos.org/OpenCL/
 extra:
   recipe-maintainers:
     - inducer
