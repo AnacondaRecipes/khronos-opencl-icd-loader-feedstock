@@ -25,9 +25,8 @@ requirements:
     - cmake
     - {{ compiler('c') }}
     - {{ stdlib('c') }}
-    - python
     - make   # [not win]
-    - ninja  # [win]
+    - ninja-base  # [win]
   host:
     - opencl-headers ={{ version }}
   run:
