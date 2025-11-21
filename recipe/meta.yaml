@@ -57,6 +57,13 @@ about:
   license: Apache-2.0
   license_file: LICENSE
   summary: A driver loader for OpenCL
+  description: |
+    An ICD loader for OpenCL. OpenCL defines an Installable Client 
+    Driver (ICD) mechanism to allow developers to build applications
+    against an Installable Client Driver loader (ICD loader) rather
+    than linking their applications against a specific OpenCL 
+    implementation. This package contains the loader, not any
+    specific driverss.
   dev_url: https://github.com/KhronosGroup/OpenCL-ICD-Loader
   doc_url: https://registry.khronos.org/OpenCL/
 extra:
